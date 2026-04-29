@@ -56,6 +56,8 @@ But for the basic version, I just wrote simple codes in 3 main files, transactio
 The Gemini 2.5 flash is used for this application but you can use any other API or LLM model and the LangChain documentation is very useful to start with.
 https://docs.langchain.com/oss/python/langchain/overview
 
+https://docs.langchain.com/oss/python/langchain/agents
+
 ## Technologies Used
 
 This project currently uses:
