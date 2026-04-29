@@ -6,7 +6,7 @@ from tools.transactions import PersonalFinance
 from langchain_core.tools import tool
 
 load_dotenv()
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
 
 financial_summary = PersonalFinance("data/expense_data_1.csv")
 

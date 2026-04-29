@@ -63,7 +63,7 @@ This project currently uses:
 
 * Python
 * LangChain
-* Gemini 2.5 Flash
+* Gemini 2.5 Flash Lite
 * Pandas
 * CSV transaction data
 
