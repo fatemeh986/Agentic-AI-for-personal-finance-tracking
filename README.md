@@ -54,7 +54,6 @@ I structured the project into different directories and files to make developmen
 
 But for the basic version, I just wrote simple codes in 3 main files, transactions.py, agent.py and prompt.py.
 The Gemini 2.5 flash is used for this application but you can use any other API or LLM model and the LangChain documentation is very useful to start with.
-https://docs.langchain.com/oss/python/langchain/overview
 
 https://docs.langchain.com/oss/python/langchain/agents
 
