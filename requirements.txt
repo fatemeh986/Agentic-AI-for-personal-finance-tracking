@@ -1,0 +1,9 @@
+langchain
+langgraph
+langchain_community
+pandas
+python-dotenv
+langchain-google-genai
+pydantic
+#if you use gemini
+langchain[google-genai]
