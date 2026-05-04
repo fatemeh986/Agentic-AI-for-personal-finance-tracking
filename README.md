@@ -1,29 +1,43 @@
 # Agentic AI for Personal Finance Tracking
 
-This project is an agentic AI application for personal finance tracking. I am developing it step by step, and in each version I explain what has been implemented and how to run it.
+This project is an agentic AI application for personal finance tracking.
+I am building it step by step, and each version documents what has been
+implemented and how to run it.
 
-The main goal of this project is to build a personal finance AI agent that can analyze transactions, income, and expenses. The agent should help detect unusual spending patterns, identify unnecessary expenses, summarize monthly spending, and eventually use market and financial news to provide useful financial insights.
+The main goal is to build a personal finance AI agent that can analyze
+transactions, income, and expenses — detect unusual spending patterns,
+summarize monthly activity, cross-reference live market data and financial
+news, and provide actionable investment advice.
 
-The dataset in this repository is downloaded from Kaggle. On my local system, I use my own transaction data, but you can also replace the dataset with your own data.
+The dataset in this repository is downloaded from Kaggle:
+**Personal Budget Transactions Dataset** by Ismet Semedov.
+On my local system I use my own transaction data, but you can replace
+the CSV with your own as long as it contains `Date`, `Category`,
+`Income/Expense`, and `INR` columns.
 
 ---
 
 ## Current Version
 
-So far, I have developed a basic version of the agentic AI application that can be run from the CLI.
+### ✅ Phase 1 — Core agent + transaction analysis (complete)
+- Reads personal transaction data from a CSV file
+- Answers natural language questions about spending and income
+- Tools: total spending by category, monthly income vs expense summary,
+  top 10 biggest expenses, balance estimate per month
+- Runs entirely from the CLI
 
-This first version focuses on:
+### ✅ Phase 2 — Market data + financial news (complete)
+- Fetches live stock prices for MSFT, AAPL, GOOGL, TSLA, IBM
+  via Alpha Vantage — including one-month trend and price range
+- Caches stock data daily so the API is only called once per day
+- Searches latest financial news via Tavily API
+- Agent combines your personal transaction data with live market
+  signals to give specific investment suggestions
 
-- Reading transaction data from a CSV file
-- Answering simple finance-related questions
-- Using an LLM to generate natural language responses
-- Structuring the project in a way that can be extended later
-
-For the first basic version, the main logic is implemented in three files:
-
-- `transactions.py`
-- `agent.py`
-- `prompt.py`
+### 🔲 Phase 3 — RAG chatbot + memory (in progress)
+### 🔲 Phase 4 — Real bank data + Neo4j graph
+### 🔲 Phase 5 — Backend + deployment
+### 🔲 Phase 6 — Product launch
 
 ---
 
@@ -33,26 +47,25 @@ I structured the project into different directories and files to make developmen
 
 ```text
 .
-├── agent
-│   ├── tools
+├── agent/
+│   ├── tools/
 │   │   ├── transactions.py
 │   │   ├── market.py
 │   │   └── news.py
 │   ├── agent.py
-│   ├── prompt.py
+│   ├── prompts.py
 │   ├── memory.py
 │   └── state.py
-├── data
+├── data/
 │   └── expense_data_1.csv
-├── ui
+├── ui/
 │   └── app.py
-├── api
+├── api/
 │   └── main.py
 ├── requirements.txt
 └── README.md
 ```
 
-But for the basic version, I just wrote simple codes in 3 main files, transactions.py, agent.py and prompt.py.
 The Gemini 2.5 flash is used for this application but you can use any other API or LLM model and the LangChain documentation is very useful to start with.
 
 https://docs.langchain.com/oss/python/langchain/agents
@@ -61,63 +74,93 @@ https://docs.langchain.com/oss/python/langchain/agents
 
 This project currently uses:
 
-* Python
-* LangChain
-* Gemini 2.5 Flash Lite
-* Pandas
-* CSV transaction data
+| Tool | Purpose |
+|---|---|
+| Python 3.11 | Language |
+| LangChain + LangGraph | Agent framework and tool orchestration |
+| Gemini 2.5 Flash Lite | LLM (replaceable with any LangChain-compatible model) |
+| Pandas | Transaction data analysis |
+| Alpha Vantage | Live stock price data |
+| Tavily | Financial news search |
+| python-dotenv | Environment variable management |
 
-Gemini 2.5 Flash is currently used as the main LLM, but you can replace it with another model or API provider.
-
-LangChain is used to build the agent workflow. The LangChain documentation is a useful starting point:
-
+You can replace Gemini with any other model supported by LangChain.
+See the LangChain documentation for available integrations:
 https://docs.langchain.com/oss/python/langchain/overview
+
+---
 
 ## Installation
 
-1- First, clone the repository:
-
+**1 — Clone the repository**
 ```bash
 git clone https://github.com/your-username/Agentic-AI-for-personal-finance-tracking.git
-```
-
-2- Go into the project folder:
-
-```bash
 cd Agentic-AI-for-personal-finance-tracking
 ```
 
-3- Create and activate a virtual environment:
-
+**2 — Create and activate a virtual environment**
 ```bash
 python -m venv venv
 ```
-On Windows:
+Windows:
 ```bash
 venv\Scripts\activate
 ```
-On Linux/macOS:
+Linux / macOS:
 ```bash
 source venv/bin/activate
 ```
 
-4- Install backages:
+**3 — Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
+---
+
 
 ## Environment Variables
 
-Create a .env file in the root directory and add your API key. for example:
-```bash
-GOOGLE_API_KEY=your_api_key_here
+Create a `.env` file in the root directory with your API keys:
+
+```
+GOOGLE_API_KEY=your_gemini_api_key
+ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key
+TAVILY_API_KEY=your_tavily_api_key
 ```
 
-## How to Run:
+- Gemini API key: https://aistudio.google.com
+- Alpha Vantage API key (free): https://www.alphavantage.co
+- Tavily API key (free tier available): https://tavily.com
 
-You can run the basic CLI version with:
+---
+
+## How to Run
+
 ```bash
-python agentic.py
+python agent/agent.py
 ```
 
-After running the script, you can ask questions about your transaction data. Check the tools in agent.py file to see which tools the agent uses so far to answer your questions.
+After running, type your question in the terminal. Examples:
+
+- *"In which category do I spend the most?"*
+- *"What is my balance for each month?"*
+- *"Based on my expenses, which stocks should I consider investing in?"*
+- *"How can I save money and where should I invest it?"*
+
+The agent will automatically decide which tools to call based on your question.
+
+---
+
+## How It Works
+
+```
+Your question
+      ↓
+LangGraph agent thinks: which tools do I need?
+      ↓
+Calls tools: transactions + market prices + news
+      ↓
+Gemini reads all results and writes a specific answer
+      ↓
+Printed in your terminal
+```

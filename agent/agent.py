@@ -4,6 +4,8 @@ from langchain.agents import create_agent
 from prompts import prompt
 from tools.transactions import PersonalFinance
 from langchain_core.tools import tool
+from tools.news import search_news
+from tools.market import tech_stock_price
 
 load_dotenv()
 llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash-lite")
@@ -18,9 +20,9 @@ def get_total_spent_by_category() -> str:
 
 @tool
 def get_monthly_summary() -> str:
-    """Return incomes vs spenses summary for December and January."""
-    dec, jan = financial_summary.monthly_summary()
-    return f"December:\n{dec.to_string()}\n\nJanuary:\n{jan.to_string()}"
+    """Return income vs expenses summary for each month in the dataset."""
+    monthly_summary = financial_summary.monthly_summary()
+    return monthly_summary.to_string()
 
 @tool
 def get_ten_biggest_spenses() -> str:
@@ -34,11 +36,23 @@ def get_balance_estimate() -> str:
     dec, jan = financial_summary.balance_estimate()
     return f"December balance: {dec}\nJanuary balance: {jan}"
 
+@tool
+def get_market_news() -> str:
+    """Return the latest mwrket news specially tech companies"""
+    return search_news()
+
+@tool
+def market_stock_prices() -> str:
+    """Return daily stock prices of tech companies"""
+    return tech_stock_price()
+
 tools=[
     get_total_spent_by_category,
     get_monthly_summary,
     get_ten_biggest_spenses,
-    get_balance_estimate
+    get_balance_estimate,
+    get_market_news,
+    market_stock_prices
 ]
 
 agent = create_agent(
