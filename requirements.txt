@@ -8,3 +8,9 @@ pydantic
 langchain[google-genai]
 alpha_vantage
 tavily-python
+mem0ai
+qdrant-client
+langchain-qdrant
+pypdf
+streamlit
+chainlit
