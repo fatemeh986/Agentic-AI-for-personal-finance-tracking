@@ -178,14 +178,15 @@ LANGSMITH_TRACING=true
 chainlit run ui/app.py
 ```
 
-After running, type your question in the terminal. Examples:
+Example questions to ask the agent:
 
 - *"In which category do I spend the most?"*
 - *"What is my balance for each month?"*
 - *"Based on my expenses, which stocks should I consider investing in?"*
-- *"How can I save money and where should I invest it?"*
+- *"How can I save more money to reach my goal?"*
 
-The agent will automatically decide which tools to call based on your question.
+To use your own data, replace `data/expense_data_1.csv` with your own CSV file.
+Make sure it contains these columns: `Date`, `Category`, `Income/Expense`, `INR`
 
 ---
 
@@ -202,16 +203,3 @@ Gemini reads all results and writes a specific answer
       ↓
 Printed in your terminal
 ```
----
-
-Example questions to ask the agent:
-
-- *"In which category do I spend the most?"*
-- *"What is my balance for each month?"*
-- *"Based on my expenses, which stocks should I consider investing in?"*
-- *"How can I save more money to reach my goal?"*
-
-To use your own data, replace `data/expense_data_1.csv` with your own CSV file.
-Make sure it contains these columns: `Date`, `Category`, `Income/Expense`, `INR`
-
----
