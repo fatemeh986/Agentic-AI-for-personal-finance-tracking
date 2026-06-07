@@ -195,11 +195,13 @@ Make sure it contains these columns: `Date`, `Category`, `Income/Expense`, `INR`
 ```
 Your question
       ↓
-LangGraph agent thinks: which tools do I need?
+LangGraph agent decides which tools are needed
       ↓
-Calls tools: transactions + market prices + news
+Calls only relevant tools: transactions + market + news + RAG + memory
       ↓
-Gemini reads all results and writes a specific answer
+Gemini reads all results and writes a specific, data-driven answer
       ↓
-Printed in your terminal
+Answer appears in Chainlit chat UI
+↓
+Interaction traced in LangSmith dashboard
 ```
