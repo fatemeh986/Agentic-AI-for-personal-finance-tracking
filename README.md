@@ -34,7 +34,7 @@ the CSV with your own as long as it contains `Date`, `Category`,
 - Agent combines your personal transaction data with live market
   signals to give specific investment suggestions
 
-### 🔲 Phase 3 — RAG chatbot + memory (in progress)
+### ✅ Phase 3 — RAG chatbot + memory (in progress)
 - Chainlit chat UI replaces CLI
 - RAG retrieval from personal financial context documents (PDF) via Qdrant vector store
 - Persistent memory across sessions via Mem0
