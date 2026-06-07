@@ -1,6 +1,7 @@
 langchain
 langgraph
 langchain_community
+langsmith
 pandas
 python-dotenv
 langchain-google-genai
@@ -12,5 +13,4 @@ mem0ai
 qdrant-client
 langchain-qdrant
 pypdf
-streamlit
 chainlit
