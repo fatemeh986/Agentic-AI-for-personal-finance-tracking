@@ -35,9 +35,36 @@ the CSV with your own as long as it contains `Date`, `Category`,
   signals to give specific investment suggestions
 
 ### 🔲 Phase 3 — RAG chatbot + memory (in progress)
+- Chainlit chat UI replaces CLI
+- RAG retrieval from personal financial context documents (PDF) via Qdrant vector store
+- Persistent memory across sessions via Mem0
+- Agent remembers user goals, income, and preferences between conversations
+
 ### 🔲 Phase 4 — Real bank data + Neo4j graph
 ### 🔲 Phase 5 — Backend + deployment
 ### 🔲 Phase 6 — Product launch
+
+---
+
+## Evaluation & Observability
+
+All agent runs are traced automatically with **LangSmith** — every tool call, LLM call, latency, and token count is visible in the dashboard.
+
+Answer quality is measured with **Ragas** against a set of ground truth questions from the dataset.
+
+**Prompt optimization results (measured with LangSmith):**
+- Latency reduced from 7.45s → 2.76s after prompt refinement
+- Token usage reduced from 3,207 → 1,700 per run
+- Agent now calls only relevant tools instead of all tools on every question
+
+**Ragas evaluation (gemini-2.5-flash-lite):**
+- answer_correctness: TBD
+- answer_relevancy: TBD
+
+To run evaluation:
+```bash
+python evaluation.py
+```
 
 ---
 
@@ -62,6 +89,7 @@ I structured the project into different directories and files to make developmen
 │   └── app.py
 ├── api/
 │   └── main.py
+├── evaluation.py
 ├── requirements.txt
 └── README.md
 ```
@@ -80,9 +108,13 @@ This project currently uses:
 | LangChain + LangGraph | Agent framework and tool orchestration |
 | Gemini 2.5 Flash Lite | LLM (replaceable with any LangChain-compatible model) |
 | Pandas | Transaction data analysis |
+| Qdrant | Vector store for RAG |
+| Mem0 | Persistent memory across sessions |
+| Chainlit | Chat UI |
 | Alpha Vantage | Live stock price data |
 | Tavily | Financial news search |
-| python-dotenv | Environment variable management |
+| LangSmith | Tracing and observability |
+| Ragas | Answer quality evaluation |
 
 You can replace Gemini with any other model supported by LangChain.
 See the LangChain documentation for available integrations:
@@ -126,18 +158,24 @@ Create a `.env` file in the root directory with your API keys:
 GOOGLE_API_KEY=your_gemini_api_key
 ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key
 TAVILY_API_KEY=your_tavily_api_key
+MEM0_API_KEY=your_mem0_api_key
+LANGCHAIN_API_KEY=your_langsmith_api_key
+LANGSMITH_PROJECT=finance-agent
+LANGSMITH_TRACING=true
 ```
 
 - Gemini API key: https://aistudio.google.com
 - Alpha Vantage API key (free): https://www.alphavantage.co
 - Tavily API key (free tier available): https://tavily.com
+- Mem0: https://mem0.ai
+- LangSmith (free tier): https://smith.langchain.com
 
 ---
 
 ## How to Run
 
 ```bash
-python agent/agent.py
+chainlit run ui/app.py
 ```
 
 After running, type your question in the terminal. Examples:
@@ -164,3 +202,16 @@ Gemini reads all results and writes a specific answer
       ↓
 Printed in your terminal
 ```
+---
+
+Example questions to ask the agent:
+
+- *"In which category do I spend the most?"*
+- *"What is my balance for each month?"*
+- *"Based on my expenses, which stocks should I consider investing in?"*
+- *"How can I save more money to reach my goal?"*
+
+To use your own data, replace `data/expense_data_1.csv` with your own CSV file.
+Make sure it contains these columns: `Date`, `Category`, `Income/Expense`, `INR`
+
+---
