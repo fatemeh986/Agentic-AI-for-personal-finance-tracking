@@ -55,6 +55,7 @@ Answer quality is measured with **Ragas** against a set of ground truth question
 **Prompt optimization results (measured with LangSmith):**
 - Latency reduced from 7.45s → 2.76s after prompt refinement
 - Token usage reduced from 3,207 → 1,700 per run
+- Answer_relevancy score of 0.84 on a curated test set
 - Agent now calls only relevant tools instead of all tools on every question
 
 **Ragas evaluation (gemini-2.5-flash-lite):**
