@@ -206,3 +206,25 @@ Answer appears in Chainlit chat UI
 ↓
 Interaction traced in LangSmith dashboard
 ```
+
+## Deployment
+
+**Status:** Live on AWS ECS Fargate
+
+### Production Architecture
+- **Container Runtime:** AWS ECS Fargate (serverless containers)
+- **Image Registry:** Amazon ECR
+- **Container:** Docker (optimized for Fargate)
+- **Monitoring:** CloudWatch logs + LangSmith traces
+- **IAM:** Service role with least-privilege permissions
+- **Auto-scaling:** ECS service auto-scaling based on demand
+
+### Access
+- **Live deployment:** [Your URL if public]
+- **Local development:** `chainlit run ui/app.py`
+
+### Infrastructure as Code Notes
+- Uses Fargate for managed container orchestration
+- ECR stores Docker images privately
+- CloudWatch monitors latency, errors, and token usage
+- Cost optimization: Selective tool-calling reduces inference costs
