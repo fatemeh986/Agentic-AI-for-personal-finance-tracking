@@ -1,0 +1,17 @@
+.chainlit
+.vscode
+.gitignore
+chainlit.md
+guides.txt
+README.md
+testcode.py
+testcode.ipynb
+agent/__pycache__
+agent/__init__.py
+agent/tools/__pycache__
+data/archive (2)
+data/MyData
+.env
+__pycache__
+*.pyc
+.pytest_cache
