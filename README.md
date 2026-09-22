@@ -208,23 +208,38 @@ Interaction traced in LangSmith dashboard
 ```
 
 ## Deployment
-
-**Status:** Live on AWS ECS Fargate
-
-### Production Architecture
-- **Container Runtime:** AWS ECS Fargate (serverless containers)
-- **Image Registry:** Amazon ECR
-- **Container:** Docker (optimized for Fargate)
-- **Monitoring:** CloudWatch logs + LangSmith traces
-- **IAM:** Service role with least-privilege permissions
-- **Auto-scaling:** ECS service auto-scaling based on demand
-
-### Access
-- **Live deployment:** [Your URL if public]
-- **Local development:** `chainlit run ui/app.py`
-
-### Infrastructure as Code Notes
-- Uses Fargate for managed container orchestration
-- ECR stores Docker images privately
-- CloudWatch monitors latency, errors, and token usage
-- Cost optimization: Selective tool-calling reduces inference costs
+ 
+### ✅ Status: Live on AWS ECS Fargate
+ 
+The Finance Agent is deployed and accessible at:
+- **Live URL:** `http://35.180.226.26:8000`
+### Infrastructure
+ 
+| Component | Value |
+|-----------|-------|
+| **Runtime** | AWS ECS Fargate |
+| **Region** | eu-west-3 (Paris) |
+| **Cluster** | `financial-agent-cluster` |
+| **Service** | `financial-agent-service` |
+| **Compute** | 1 vCPU, 3GB memory |
+| **Container Registry** | Amazon ECR: `financial-agent:v1` |
+| **Monitoring** | CloudWatch Logs + LangSmith |
+ 
+### Logs & Monitoring
+ 
+All agent interactions are traced in **LangSmith**: https://smith.langchain.com
+ 
+CloudWatch logs available at: `/ecs/financial-agent-tasks`
+ 
+For AWS ECS details: [AWS ECS Documentation](https://docs.aws.amazon.com/ecs/)
+ 
+---
+ 
+## How to Contribute
+ 
+1. Create a feature branch
+2. Test locally with `chainlit run ui/app.py`
+3. Check logs and LangSmith traces
+4. Push to GitHub
+5. Open a pull request
+---
