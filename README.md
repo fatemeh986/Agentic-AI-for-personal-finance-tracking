@@ -218,7 +218,7 @@ The Finance Agent is deployed and accessible at:
 | Component | Value |
 |-----------|-------|
 | **Runtime** | AWS ECS Fargate |
-| **Region** | eu-west-3 (Paris) |
+| **Region** | eu-west-3 |
 | **Cluster** | `financial-agent-cluster` |
 | **Service** | `financial-agent-service` |
 | **Compute** | 1 vCPU, 3GB memory |
@@ -228,8 +228,6 @@ The Finance Agent is deployed and accessible at:
 ### Logs & Monitoring
  
 All agent interactions are traced in **LangSmith**: https://smith.langchain.com
- 
-CloudWatch logs available at: `/ecs/financial-agent-tasks`
  
 For AWS ECS details: [AWS ECS Documentation](https://docs.aws.amazon.com/ecs/)
  
