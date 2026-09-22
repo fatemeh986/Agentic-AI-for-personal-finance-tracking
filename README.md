@@ -40,8 +40,14 @@ the CSV with your own as long as it contains `Date`, `Category`,
 - Persistent memory across sessions via Mem0
 - Agent remembers user goals, income, and preferences between conversations
 
-### 🔲 Phase 4 — Real bank data + Neo4j graph
-### 🔲 Phase 5 — Backend + deployment
+### ✅ Phase 4 — Deployment to AWS ECS Fargate (complete)
+- Live on AWS ECS Fargate (serverless containers)
+- Containerized with Docker
+- Automatically logged and monitored via CloudWatch
+- Secure IAM role for AWS access
+- Accessible via public URL
+
+### 🔲 Phase 5 — Real bank data + Neo4j graph
 ### 🔲 Phase 6 — Product launch
 
 ---
