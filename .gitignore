@@ -6,3 +6,6 @@ data/archive (2)
 testcode.ipynb
 testcode.py
 data/MyData
+__pycache__/
+*.pyc
+.files/
