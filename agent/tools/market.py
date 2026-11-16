@@ -35,25 +35,60 @@ def tech_stock_price() -> str:
     # Otherwise fetch the data
     print("Fetching fresh stock prices from Alpha Vantage...")
     time_series = TimeSeries(key=api_key, output_format='pandas')
-    result = ""
+    rows = []          # one dict per stock that downloaded successfully
+    failed = []        # tickers that could not be fetched
     for ticker in symbols:
         print(f"Fetching data for {ticker}...")
         try:
             data, _ = time_series.get_daily(ticker)
-            month = data.head(30)
+            # Rows are trading days (no weekends/holidays): ~21 trading days = 1 calendar month
+            month = data.head(21)
             latest_closed = month.iloc[0]['4. close'] # most recent closed day only
             month_ago_closed = month.iloc[-1]['4. close']
             change = latest_closed - month_ago_closed
             change_percentage = (change/month_ago_closed) * 100
             trend = "↑ UP" if change > 0 else "↓ DOWN"
-            result += f"{ticker} \n"
-            f"Latest Close: {latest_closed} \n"
-            f"One-Month Chnage: {change:+.2f} ({change_percentage:+.1f}%) {trend} \n"
-            f"One-Month High: {month['2. high'].max()}\n"
-            f"One-Month Low: {month['3. low'].min()}\n\n"
-            time.sleep(12)
+            # Step 1: only COLLECT the numbers here, don't build the text yet
+            rows.append({
+                "ticker": ticker,
+                "close": latest_closed,
+                "change": change,
+                "pct": change_percentage,
+                "trend": trend,
+                "high": month['2. high'].max(),
+                "low": month['3. low'].min(),
+            })
         except Exception as e:
             print(f"Error for {ticker}: {e}")
-            result += f"{ticker} — Error fetching data\n"
-    save_cache({"date": today, "data": result})
+            failed.append(ticker)
+        time.sleep(12)  # Alpha Vantage free tier: max 5 requests per minute
+
+    if not rows:
+        return "Error: stock data is not available right now."
+
+    # Step 2: let PYTHON compare the numbers (LLMs are unreliable at this)
+    rows.sort(key=lambda r: r["pct"], reverse=True)   # best performer first
+    best, worst = rows[0], rows[-1]
+
+    # Step 3: build the text, with the answer to "which is best/worst" at the top
+    # (the parentheses make Python join all these f-strings into ONE string)
+    result = (
+        f"Best performer: {best['ticker']} ({best['pct']:+.1f}%) | "
+        f"Worst performer: {worst['ticker']} ({worst['pct']:+.1f}%)\n"
+        "Sorted by one-month change, best to worst:\n\n"
+    )
+    for r in rows:
+        result += (
+            f"{r['ticker']}\n"
+            f"Latest Close: {r['close']}\n"
+            f"One-Month Change: {r['change']:+.2f} ({r['pct']:+.1f}%) {r['trend']}\n"
+            f"One-Month High: {r['high']}\n"
+            f"One-Month Low: {r['low']}\n\n"
+        )
+    for ticker in failed:
+        result += f"{ticker} — Error fetching data\n"
+
+    # Only cache a complete result; otherwise a temporary error would be reused all day
+    if not failed:
+        save_cache({"date": today, "data": result})
     return result
