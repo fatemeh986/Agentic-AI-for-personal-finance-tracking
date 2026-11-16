@@ -46,6 +46,11 @@ loader = PyPDFLoader(file_path)
 
 docs = loader.load()
 
+# This PDF is extracted as one word per line with lots of extra spaces,
+# which leaves very little real text in each chunk. Collapse all whitespace into single spaces.
+for doc in docs:
+    doc.page_content = " ".join(doc.page_content.split())
+
 ## chunking
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=500,
@@ -63,7 +68,7 @@ financial_summary = PersonalFinance("data/expense_data_1.csv")
 
 @tool
 def get_total_spent_by_category() -> str:
-    """Return total spending grouped by category."""
+    """Return total spending (expenses only, in INR) grouped by category, highest first."""
     result = financial_summary.total_spent_category()
     return result.to_string()
 
@@ -74,25 +79,25 @@ def get_monthly_summary() -> str:
     return monthly_summary.to_string()
 
 @tool
-def get_ten_biggest_spenses() -> str:
-    """Return 10 biggest spenses transactions"""
+def get_ten_biggest_expenses() -> str:
+    """Return the 10 biggest expense transactions (date, category, amount in INR)."""
     result=financial_summary.ten_biggest_expenses()
     return result.to_string()
 
 @tool
 def get_balance_estimate() -> str:
-    """Return estimated balance for December and January."""
+    """Return income, expenses and balance (income - expenses) for every month in the dataset."""
     result = financial_summary.balance_estimate()
     return result.to_string()
 
 @tool
 def get_market_news() -> str:
-    """Return the latest mwrket news specially tech companies"""
+    """Return the latest market news, especially about tech companies."""
     return search_news()
 
 @tool
 def market_stock_prices() -> str:
-    """Return daily stock prices of tech companies"""
+    """Return latest close price and one-month trend (change, high, low) for MSFT, AAPL, GOOGL, TSLA and IBM."""
     return tech_stock_price()
 
 # RAG
@@ -111,7 +116,7 @@ def retrieve_context(query: str):
 tools=[
     get_total_spent_by_category,
     get_monthly_summary,
-    get_ten_biggest_spenses,
+    get_ten_biggest_expenses,
     get_balance_estimate,
     get_market_news,
     market_stock_prices,
