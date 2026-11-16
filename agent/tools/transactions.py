@@ -21,9 +21,14 @@ class PersonalFinance():
             self.df = pd.read_csv(csv_path)
 
     def total_spent_category(self):
-        # Uses COLUMN_CATEGORY and LABEL_EXPENSE from config
-        total_spent_by_category = self.df.groupby(COLUMN_CATEGORY)[COLUMN_AMOUNT].sum()
-        return total_spent_by_category
+        # 1) keep only expense ROWS (filter first), 2) then group by category and sum the amount
+        expenses = self.df[self.df[COLUMN_TYPE] == LABEL_EXPENSE]
+        totals = expenses.groupby(COLUMN_CATEGORY)[COLUMN_AMOUNT].sum().sort_values(ascending=False)
+        # Compute percentages here in Python: LLMs often get arithmetic wrong
+        return pd.DataFrame({
+            "Total": totals.round(2),
+            "% of all spending": (totals / totals.sum() * 100).round(1),
+        })
     
     def monthly_summary(self):
         df_copy = self.df.copy()
